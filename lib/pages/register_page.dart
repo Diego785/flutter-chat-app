@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:realtime_chat/widgets/boton_azul.dart';
+import 'package:provider/provider.dart';
 
+import 'package:realtime_chat/helpers/show_alert.dart';
+import 'package:realtime_chat/widgets/boton_azul.dart';
+import 'package:realtime_chat/services/auth_service.dart';
 import 'package:realtime_chat/widgets/custom_input.dart';
 import 'package:realtime_chat/widgets/labels.dart';
 import 'package:realtime_chat/widgets/logo.dart';
@@ -55,6 +58,8 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context, listen: false);
+
     return Container(
       margin: EdgeInsets.only(top: 38),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -79,7 +84,21 @@ class __FormState extends State<_Form> {
             isPassword: true,
           ),
           // TODO: Crear button
-          BotonAzul(buttonText: 'Ingrese', onPressed: null)
+          BotonAzul(buttonText: 'Ingrese', onPressed: authService.autenticando
+                ? null
+                : () async {
+                    FocusScope.of(context).unfocus();
+                    final registerOk = await authService.register(nameCtrl.text.trim(),
+                        emailCtrl.text.trim(), passCtrl.text.trim());
+                        if (registerOk == true) {
+                        //TODO: Conectar a nuestro socket server
+                          Navigator.pushReplacementNamed(context, 'usuarios');
+
+                        } else {
+                          // Mostrar alerta
+                          mostrarAlerta(context, "Registro Incorrecto", registerOk);
+                        }
+                  },)
         ],
       ),
     );

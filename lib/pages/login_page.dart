@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:realtime_chat/widgets/boton_azul.dart';
+
+import 'package:realtime_chat/services/auth_service.dart';
+import 'package:realtime_chat/helpers/show_alert.dart';
 
 import 'package:realtime_chat/widgets/custom_input.dart';
 import 'package:realtime_chat/widgets/labels.dart';
@@ -18,11 +22,13 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Logo(titulo: 'Messenger',),
+                Logo(
+                  titulo: 'Messenger',
+                ),
                 _Form(),
                 Labels(
                   ruta: 'register',
-                  footText: '¿No tienes cuenta?' ,
+                  footText: '¿No tienes cuenta?',
                   footText2: '¡Registrate aquí!',
                 ),
                 GestureDetector(
@@ -52,6 +58,8 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context, listen: false);
+
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -71,7 +79,24 @@ class __FormState extends State<_Form> {
           ),
 
           // TODO: Crear button
-          BotonAzul(buttonText: 'Ingrese', onPressed: null)
+          BotonAzul(
+            buttonText: 'Ingrese',
+            onPressed: authService.autenticando
+                ? null
+                : () async {
+                    FocusScope.of(context).unfocus();
+                    final loginOk = await authService.login(
+                        emailCtrl.text.trim(), passCtrl.text.trim());
+                        if (loginOk) {
+                        //TODO: Conectar a nuestro socket server
+                          Navigator.pushReplacementNamed(context, 'usuarios');
+
+                        } else {
+                          // Mostrar alerta
+                          mostrarAlerta(context, "Login Incorrecto", "Estas credenciales no corresponden a nuestros registros.");
+                        }
+                  },
+          )
         ],
       ),
     );
