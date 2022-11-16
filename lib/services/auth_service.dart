@@ -89,16 +89,27 @@ class AuthService with ChangeNotifier {
 
   Future<bool> isLoggedIn() async {
     final token = await this._storage.read(key: 'token');
-    
+
     final uri = Uri.parse('${Environment.apiUrl}/login/renew');
 
-    final resp = await http.get(
-      uri,
-      headers: {
-      'Content-Type': 'application/json',
-      'x-token': token!,
-      },
-    );
+    final resp;
+
+    if (token != null) {
+      resp = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': token,
+        },
+      );
+    } else {
+      resp = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+    }
 
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);
@@ -108,8 +119,8 @@ class AuthService with ChangeNotifier {
 
       return true;
     } else {
-     this.logout();
-     return false;
+      this.logout();
+      return false;
     }
   }
 

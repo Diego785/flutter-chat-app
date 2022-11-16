@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:realtime_chat/helpers/show_alert.dart';
+import 'package:realtime_chat/services/socket_service.dart';
 import 'package:realtime_chat/widgets/boton_azul.dart';
 import 'package:realtime_chat/services/auth_service.dart';
 import 'package:realtime_chat/widgets/custom_input.dart';
@@ -9,8 +10,6 @@ import 'package:realtime_chat/widgets/labels.dart';
 import 'package:realtime_chat/widgets/logo.dart';
 
 class RegisterPage extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,11 +18,13 @@ class RegisterPage extends StatelessWidget {
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Container(
-            height: MediaQuery.of(context).size.height*0.9,
+            height: MediaQuery.of(context).size.height * 0.9,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Logo(titulo: 'Registro',),
+                Logo(
+                  titulo: 'Registro',
+                ),
                 _Form(),
                 Labels(
                   ruta: 'login',
@@ -59,6 +60,7 @@ class __FormState extends State<_Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen: false);
+    final socketService = Provider.of<SocketService>(context);
 
     return Container(
       margin: EdgeInsets.only(top: 38),
@@ -84,21 +86,25 @@ class __FormState extends State<_Form> {
             isPassword: true,
           ),
           // TODO: Crear button
-          BotonAzul(buttonText: 'Ingrese', onPressed: authService.autenticando
+          BotonAzul(
+            buttonText: 'Ingrese',
+            onPressed: authService.autenticando
                 ? null
                 : () async {
                     FocusScope.of(context).unfocus();
-                    final registerOk = await authService.register(nameCtrl.text.trim(),
-                        emailCtrl.text.trim(), passCtrl.text.trim());
-                        if (registerOk == true) {
-                        //TODO: Conectar a nuestro socket server
-                          Navigator.pushReplacementNamed(context, 'usuarios');
-
-                        } else {
-                          // Mostrar alerta
-                          mostrarAlerta(context, "Registro Incorrecto", registerOk);
-                        }
-                  },)
+                    final registerOk = await authService.register(
+                        nameCtrl.text.trim(),
+                        emailCtrl.text.trim(),
+                        passCtrl.text.trim());
+                    if (registerOk == true) {
+                      socketService.connect();
+                      Navigator.pushReplacementNamed(context, 'usuarios');
+                    } else {
+                      // Mostrar alerta
+                      mostrarAlerta(context, "Registro Incorrecto", registerOk);
+                    }
+                  },
+          )
         ],
       ),
     );
