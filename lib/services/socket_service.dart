@@ -34,6 +34,16 @@ class SocketService with ChangeNotifier {
       notifyListeners();
     });
 
+    this._socket.on('emitir-alerta', (payload) {
+      print(payload);
+      notifyListeners();
+    });
+
+    this._socket.on('emitir-respuesta', (payload) {
+      print(payload);
+      notifyListeners();
+    });
+
     this._socket.on('disconnect', (_) {
       this._serverStatus = ServerStatus.Offline;
       notifyListeners();

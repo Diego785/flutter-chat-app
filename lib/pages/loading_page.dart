@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:realtime_chat/pages/login_page.dart';
 import 'package:realtime_chat/pages/usuarios_page.dart';
+import 'package:realtime_chat/pages/home_page.dart';
 
 import 'package:realtime_chat/services/auth_service.dart';
 import 'package:realtime_chat/services/socket_service.dart';
@@ -29,7 +30,7 @@ class LoadingPage extends StatelessWidget {
     final autenticado = await authService.isLoggedIn();
     if (autenticado) {
       socketService.connect();
-      Navigator.pushReplacement(
+       Navigator.pushReplacement(
           context,
           PageRouteBuilder(
               pageBuilder: (
@@ -37,7 +38,7 @@ class LoadingPage extends StatelessWidget {
                 __,
                 ___,
               ) =>
-                  UsuariosPage(),
+                  HomePage(),
               transitionDuration: Duration(milliseconds: 0)));
     } else {
       Navigator.pushReplacement(
