@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:realtime_chat/pages/Inventory/inventory_page.dart';
 import 'package:realtime_chat/pages/Patients/patient_page.dart';
 import 'package:realtime_chat/pages/Stock/stock_page.dart';
 import 'package:realtime_chat/pages/Suppliers/supplier_page.dart';
+import 'package:realtime_chat/services/auth_service.dart';
+import 'package:realtime_chat/services/socket_service.dart';
 
 import 'package:realtime_chat/widgets/headers.dart';
 import 'package:realtime_chat/widgets/boton_gordo.dart';
@@ -24,29 +27,49 @@ class ItemBoton {
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final socketService = Provider.of<SocketService>(context);
     final items = <ItemBoton>[
       ItemBoton(
         FontAwesomeIcons.box,
         'Inventario',
         Color(0xff6989F5),
         Color(0xff906EF5),
-         () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EncabezadoInventory())),
+        () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => EncabezadoInventory())),
       ),
-      ItemBoton(FontAwesomeIcons.boxesPacking, 'Stock', Color(0xff66A9F2),
-          Color(0xff536CF6),  () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EncabezadoStock())),),
-      ItemBoton(FontAwesomeIcons.hospitalUser, 'Pacientes', Color(0xffF2D572),
-          Color(0xffE06AA3), () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EncabezadoPatient())), ),
-      ItemBoton(FontAwesomeIcons.userGroup, 'Proveedores', Color(0xff317183),
-          Color(0xff46997D), () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EncabezadoSupplier())),),
+      ItemBoton(
+        FontAwesomeIcons.boxesPacking,
+        'Stock',
+        Color(0xff66A9F2),
+        Color(0xff536CF6),
+        () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => EncabezadoStock())),
+      ),
+      ItemBoton(
+        FontAwesomeIcons.hospitalUser,
+        'Pacientes',
+        Color(0xffF2D572),
+        Color(0xffE06AA3),
+        () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => EncabezadoPatient())),
+      ),
+      ItemBoton(
+        FontAwesomeIcons.userGroup,
+        'Proveedores',
+        Color(0xff317183),
+        Color(0xff46997D),
+        () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => EncabezadoSupplier())),
+      ),
       ItemBoton(FontAwesomeIcons.receipt, 'Receta Electrónica',
           Color(0xff6989F5), Color(0xff906EF5), null),
       ItemBoton(FontAwesomeIcons.barcode, 'Código de Barra', Color(0xff66A9F2),
           Color(0xff536CF6), null),
-      ItemBoton(Icons.logout, 'Logout', Colors.red, Colors.orangeAccent, null),
+      ItemBoton(Icons.logout, 'Logout', Colors.red, Colors.orangeAccent, () {
+        socketService.disconenct();
+        Navigator.pushReplacementNamed(context, 'login');
+        AuthService.deleteToken();
+      }),
       // new ItemBoton(FontAwesomeIcons.biking, 'Awards', Color(0xff317183),
       //     Color(0xff46997D)),
       // new ItemBoton(FontAwesomeIcons.carCrash, 'Motor Accident',
@@ -73,24 +96,33 @@ class HomePage extends StatelessWidget {
         .toList();
 
     return Scaffold(
-        // backgroundColor: Colors.red,
-        body: Stack(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(top: 200),
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            children: <Widget>[
-              SizedBox(
-                height: 80,
-              ),
-              ...itemMap
-            ],
+      // backgroundColor: Colors.red,
+      body: Stack(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(top: 200),
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              children: <Widget>[
+                SizedBox(
+                  height: 80,
+                ),
+                ...itemMap
+              ],
+            ),
           ),
-        ),
-        _Encabezado()
-      ],
-    ));
+          _Encabezado()
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.message),
+        onPressed: () {
+          // socketService.emit('emitir-mensaje',
+          //     {'nombre': 'Flutter', 'mensaje': 'Hola desde Flutter'});
+          Navigator.pushNamed(context, 'usuarios');
+        },
+      ),
+    );
   }
 }
 
