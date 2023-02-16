@@ -4,10 +4,12 @@ class MyButton extends StatelessWidget {
   final String buttonText;
   final Color buttonColor;
   final IconData buttonIcon;
+  final void Function()? onTap;
   MyButton(
       {required this.buttonText,
       required this.buttonColor,
-      required this.buttonIcon});
+      required this.buttonIcon,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +43,7 @@ class MyButton extends StatelessWidget {
           buttonIcon,
           color: Colors.white,
         ),
-        onTap: () {
-          Navigator.pushNamed(context, 'products');
-        },
+        onTap: onTap,
       ),
     );
   }

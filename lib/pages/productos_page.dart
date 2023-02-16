@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:realtime_chat/pages/productos.dart';
 
 import 'package:realtime_chat/services/socket_service.dart';
 import 'package:realtime_chat/models/producto.dart';
@@ -80,7 +81,7 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  ListView _listViewProducts() {
+  /*ListView _listViewProducts() {
     return ListView.separated(
       physics: BouncingScrollPhysics(),
       itemBuilder: (_, i) => _productoListTile(productos[i]),
@@ -99,6 +100,21 @@ class _ProductsPageState extends State<ProductsPage> {
       ),
       
       
+    );
+  }*/
+
+  ListView _listViewProducts() {
+    return ListView.separated(
+      primary: false,
+      shrinkWrap: true,
+      physics: BouncingScrollPhysics(),
+      itemBuilder: (_, i) => ProductosContainer(producto: productos[i]),
+      separatorBuilder: (_, i) => Divider(
+        thickness: 10,
+        color: Colors.transparent,
+      ),
+      itemCount: productos.length,
+      padding: EdgeInsets.all(12),
     );
   }
 

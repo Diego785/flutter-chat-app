@@ -24,7 +24,7 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Logo(
-                  titulo: 'Messenger',
+                  titulo: 'Chat DHV',
                 ),
                 _Form(),
                 Labels(
@@ -91,7 +91,7 @@ class __FormState extends State<_Form> {
                         emailCtrl.text.trim(), passCtrl.text.trim());
                         if (loginOk) {
                           socketService.connect();
-                          Navigator.pushReplacementNamed(context, 'usuarios');
+                          Navigator.pushReplacementNamed(context, 'home');
 
                         } else {
                           // Mostrar alerta

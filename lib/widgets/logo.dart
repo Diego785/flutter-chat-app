@@ -17,7 +17,8 @@ class Logo extends StatelessWidget {
         child: Column(
           children: [
             Image(
-              image: AssetImage('assets/tag-logo.png'),
+              image: AssetImage('images/logo_snake_login.png'),
+              
             ),
             SizedBox(
               height: 20,

@@ -98,7 +98,7 @@ class __FormState extends State<_Form> {
                         passCtrl.text.trim());
                     if (registerOk == true) {
                       socketService.connect();
-                      Navigator.pushReplacementNamed(context, 'usuarios');
+                      Navigator.pushReplacementNamed(context, 'home');
                     } else {
                       // Mostrar alerta
                       mostrarAlerta(context, "Registro Incorrecto", registerOk);

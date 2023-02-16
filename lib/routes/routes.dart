@@ -1,15 +1,16 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:realtime_chat/pages/chat_page.dart';
-import 'package:realtime_chat/pages/loading_page.dart';
-import 'package:realtime_chat/pages/login_page.dart';
+import 'package:realtime_chat/pages/Home/home_page.dart';
+import 'package:realtime_chat/pages/System/loading_page.dart';
+import 'package:realtime_chat/pages/System/login_page.dart';
 import 'package:realtime_chat/pages/productos_page.dart';
-import 'package:realtime_chat/pages/register_page.dart';
-import 'package:realtime_chat/pages/usuarios_page.dart';
+import 'package:realtime_chat/pages/System/register_page.dart';
+import 'package:realtime_chat/pages/Chat/usuarios_page.dart';
+import 'package:realtime_chat/pages/Chat/chat_page.dart';
 
 final Map<String, Widget Function(BuildContext)> appRoutes = {
-  'home': ( _ ) => UsuariosPage(),
+  'home': ( _ ) => HomePage(),
   'products': (_) => ProductsPage(),
   'usuarios': ( _ ) => UsuariosPage(),
   'loading': ( _ ) => LoadingPage(),
