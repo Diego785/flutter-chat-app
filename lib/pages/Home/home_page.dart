@@ -4,8 +4,10 @@ import 'package:animate_do/animate_do.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:realtime_chat/pages/Home/ejemplo_screen.dart';
 import 'package:realtime_chat/pages/Inventory/inventory_page.dart';
 import 'package:realtime_chat/pages/Patients/patient_page.dart';
+import 'package:realtime_chat/pages/Receta/receta_page.dart';
 import 'package:realtime_chat/pages/Stock/stock_page.dart';
 import 'package:realtime_chat/pages/Suppliers/supplier_page.dart';
 import 'package:realtime_chat/services/auth_service.dart';
@@ -13,6 +15,7 @@ import 'package:realtime_chat/services/socket_service.dart';
 
 import 'package:realtime_chat/widgets/headers.dart';
 import 'package:realtime_chat/widgets/boton_gordo.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class ItemBoton {
   final IconData icon;
@@ -24,7 +27,36 @@ class ItemBoton {
   ItemBoton(this.icon, this.texto, this.color1, this.color2, this.onTap);
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String _data = "";
+
+  Future<void> scan() async {
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+        '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _data = barcodeScanRes;
+    });
+    // Añadir producto
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EjemploScreen(_data)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final socketService = Provider.of<SocketService>(context);
@@ -61,10 +93,21 @@ class HomePage extends StatelessWidget {
         () => Navigator.push(context,
             MaterialPageRoute(builder: (context) => EncabezadoSupplier())),
       ),
-      ItemBoton(FontAwesomeIcons.receipt, 'Receta Electrónica',
-          Color(0xff6989F5), Color(0xff906EF5), null),
-      ItemBoton(FontAwesomeIcons.barcode, 'Código de Barra', Color(0xff66A9F2),
-          Color(0xff536CF6), null),
+      ItemBoton(
+        FontAwesomeIcons.receipt, 
+        'Receta Electrónica',
+          Color(0xff6989F5),
+          Color(0xff906EF5),
+          () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => RecetaPage())),
+      ),
+      ItemBoton(
+        FontAwesomeIcons.barcode,
+        'Código de Barra',
+        Color(0xff66A9F2),
+        Color(0xff536CF6),
+        () => scan(),
+      ),
       ItemBoton(Icons.logout, 'Logout', Colors.red, Colors.orangeAccent, () {
         socketService.disconenct();
         Navigator.pushReplacementNamed(context, 'login');

@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:realtime_chat/global/environment.dart';
 import 'package:realtime_chat/models/specific-products.dart';
 import 'package:realtime_chat/models/producto.dart';
+import 'package:realtime_chat/models/uniqueproducto.dart';
+import 'package:realtime_chat/services/auth_service.dart';
 
 class ProductsService with ChangeNotifier {
   Future<List<Product>> getProducts() async {
@@ -30,6 +32,33 @@ class ProductsService with ChangeNotifier {
       return productResponse.myProducts;
     } catch (error) {
       return [];
+    }
+  }
+
+  Future<Producto?> getProductforId(String productoID) async {
+    try {
+      final uri = Uri.parse(
+          '${Environment.apiUrl}/productos/unique-product/$productoID');
+      final resp;
+      final token = await AuthService.getToken();
+
+      if (token != null) {
+        print('TOKEN NO NULL');
+
+        resp = await http.get(uri,
+            headers: {'Content-Type': 'application/json', 'x-token': token});
+      } else {
+        print('TOKEN NULL');
+
+        resp = await http.get(uri, headers: {
+          'Content-Type': 'application/json',
+        });
+      }
+
+      final productoResponse = uniqueProductoFromJson(resp.body);
+      return productoResponse.producto;
+    } catch (error) {
+      return null;
     }
   }
 }

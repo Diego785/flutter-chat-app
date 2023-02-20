@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:realtime_chat/services/auth_service.dart';
 import 'package:realtime_chat/services/chat_service.dart';
 import 'package:realtime_chat/services/productos_service.dart';
+import 'package:realtime_chat/services/recetas_service.dart';
 import 'package:realtime_chat/services/socket_service.dart';
 
 import 'package:realtime_chat/routes/routes.dart';
@@ -110,6 +111,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: ( _ ) =>SocketService()),
         ChangeNotifierProvider(create: ( _ ) =>ChatService()),
         ChangeNotifierProvider(create: ( _ ) =>ProductsService()),
+        ChangeNotifierProvider(create: ( _ ) =>RecetasService()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
