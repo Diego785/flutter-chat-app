@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:realtime_chat/pages/Inventory/tabs_page.dart';
+import 'package:realtime_chat/services/Inventory/inventory_service.dart';
 
 import 'package:realtime_chat/services/auth_service.dart';
 import 'package:realtime_chat/services/chat_service.dart';
-import 'package:realtime_chat/services/productos_service.dart';
+import 'package:realtime_chat/services/Inventory/productos_service.dart';
 import 'package:realtime_chat/services/socket_service.dart';
 
 import 'package:realtime_chat/routes/routes.dart';
@@ -109,6 +111,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: ( _ ) =>AuthService()),
         ChangeNotifierProvider(create: ( _ ) =>SocketService()),
         ChangeNotifierProvider(create: ( _ ) =>ChatService()),
+        ChangeNotifierProvider(create: ( _ ) =>InventoryService()),
+        ChangeNotifierProvider(create: ( _ ) =>NavegacionModel()),
         ChangeNotifierProvider(create: ( _ ) =>ProductsService()),
       ],
       child: MaterialApp(

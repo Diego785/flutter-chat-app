@@ -115,6 +115,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green.shade900,
         child: Icon(Icons.message),
         onPressed: () {
           // socketService.emit('emitir-mensaje',

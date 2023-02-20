@@ -19,6 +19,31 @@ class ProductsService with ChangeNotifier {
     }
   }
 
+  Future<List<Product>> getAvailableProducts() async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/productos/available-products');
+      final resp =
+          await http.get(uri, headers: {'Content-Type': 'application/json'});
+
+      final productResponse = productosResponseFromJson(resp.body);
+      return productResponse.myProducts;
+    } catch (error) {
+      return [];
+    }
+  }
+  Future<List<Product>> getExpiratedProducts() async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/productos/expirated-products');
+      final resp =
+          await http.get(uri, headers: {'Content-Type': 'application/json'});
+
+      final productResponse = productosResponseFromJson(resp.body);
+      return productResponse.myProducts;
+    } catch (error) {
+      return [];
+    }
+  }
+
   Future<List<SpecificProduct>> getProductwithExpirationDate() async {
     try {
       final uri =
