@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:realtime_chat/models/producto.dart';
+import 'package:realtime_chat/models/Inventary/category.dart';
+import 'package:realtime_chat/models/Inventary/producto.dart';
 import 'package:realtime_chat/pages/Inventory/details_products_page.dart';
 import 'package:realtime_chat/pages/Inventory/inventory_page.dart';
 import 'package:realtime_chat/services/Inventory/inventory_service.dart';
@@ -8,6 +9,7 @@ import 'package:realtime_chat/theme/tema.dart';
 import 'package:provider/provider.dart';
 
 List<Product> products = [];
+List<Category> categoriesProducts = [];
 
 class Tab1Page extends StatefulWidget {
   @override
@@ -38,6 +40,8 @@ class _ListaCategoriasState extends State<_ListaCategorias> {
   void loadProducts() async {
     final productsService = ProductsService();
     final category = Provider.of<InventoryService>(context, listen: false);
+    categoriesProducts = await productsService.getCategories();
+
     print("RELOADING");
     if (category.selectedCategory == 'Todos') {
       products = await productsService.getProducts();
@@ -275,50 +279,72 @@ class _AllProductsPageState extends State<AllProductsPage> {
           topRight: Radius.circular(30),
         ),
       ),
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
+      child: ListView.builder(
+        shrinkWrap: false,
+        itemCount: categoriesProducts.length,
         itemBuilder: (context, index) {
           return Column(
             children: [
-              RawMaterialButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailsProductsPage(
-                      name: products[index].nombre,
-                      fechaCreacion: products[index].fechaCreacion,
-                      fechaVencimiento: products[index].fechaVencimiento,
-                      imagePath: products[index].foto,
-                      index: index,
-                    ),
+              Text(
+                categoriesProducts[index].nombre,
+                style: TextStyle(color: Colors.cyan.shade900, fontSize: 30, fontFamily: 'RobotoMono'),
+              ),
+              SizedBox(
+                height: (products.length % 3) != 0
+                    ? 200 * ((products.length / 3).truncate() + 1)
+                    : 200 * (products.length / 3),
+                child: GridView.builder(
+                  scrollDirection: Axis.vertical,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
                   ),
-                ),
-                child: Hero(
-                  tag: 'foto$index',
-                  child: Container(
-                    height: 140,
-                    width: 140,
-                    // height: MediaQuery.of(context).size.height,
-                    // width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      image: DecorationImage(
-                        image: NetworkImage(products[index].foto),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        RawMaterialButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailsProductsPage(
+                                name: products[index].nombre,
+                                fechaCreacion: products[index].fechaCreacion,
+                                fechaVencimiento:
+                                    products[index].fechaVencimiento,
+                                imagePath: products[index].foto,
+                                index: index,
+                              ),
+                            ),
+                          ),
+                          child: Hero(
+                            tag: 'foto$index',
+                            child: Container(
+                              height: 140,
+                              width: 140,
+                              // height: MediaQuery.of(context).size.height,
+                              // width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                image: DecorationImage(
+                                  image: NetworkImage(products[index].foto),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Text(products[index].nombre),
+                      ],
+                    );
+                  },
                 ),
               ),
-              Text(products[index].nombre),
             ],
           );
         },
-        itemCount: products.length,
       ),
     );
   }

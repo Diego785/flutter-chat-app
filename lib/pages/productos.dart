@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/producto.dart';
+import '../models/Inventary/producto.dart';
 
 class ProductosContainer extends StatelessWidget {
   final Product producto;

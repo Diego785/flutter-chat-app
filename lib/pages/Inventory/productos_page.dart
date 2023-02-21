@@ -4,7 +4,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:realtime_chat/pages/productos.dart';
 
 import 'package:realtime_chat/services/socket_service.dart';
-import 'package:realtime_chat/models/producto.dart';
+import 'package:realtime_chat/models/Inventary/producto.dart';
 import 'package:realtime_chat/services/Inventory/productos_service.dart';
 
 class ProductsPage extends StatefulWidget {
