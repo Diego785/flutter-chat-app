@@ -1,15 +1,19 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:open_file/open_file.dart';
+import 'package:permission_handler/permission_handler.dart';
+// import 'package:open_file/open_file.dart';
+import 'package:realtime_chat/models/administrador.dart';
 import 'package:realtime_chat/models/prescripcion.dart';
 import 'package:realtime_chat/models/receta.dart';
+import 'package:realtime_chat/services/administrador.dart';
 import 'package:realtime_chat/services/prescripcion_service.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
-Future<void> createPDF(String id, String paciente, DateTime fecha) async {
+Future<void> createPDF(String id, String paciente, String apellido,
+    String telefono, String direccion, DateTime fecha, BuildContext context) async {
   // Create a new PDF document.
   final PdfDocument document = PdfDocument();
   // Add a new page to the document.
@@ -26,22 +30,40 @@ Future<void> createPDF(String id, String paciente, DateTime fecha) async {
   receta = await prescripcionService.getPrescripcion(id);
   final PdfGrid grid = getGrid(receta, page);
   //Draw the header section by creating text element
-  final PdfLayoutResult result =
-      drawHeader(page, pageSize, grid, paciente, fecha);
+  MyAdministrador? administrador;
+  final administradorService = new AdministradorService();
+  administrador = await administradorService.getAdministrador();
+  final PdfLayoutResult result = drawHeader(
+      page, pageSize, grid, paciente, apellido, telefono, direccion, fecha);
   // //Draw grid
   drawGrid(page, grid, result);
   //Add invoice footer
-  drawFooter(page, pageSize);
+  drawFooter(page, pageSize, administrador);
   // // Save the document.
   final List<int> bytes = await document.save();
-  // Dispose the document.
-  document.dispose();
+  
 
-  final String path = (await getExternalStorageDirectory())!.path;
-  final String fileName = '$path/Receta $paciente ${fecha.toString().substring(0, 10)}.pdf';
-  final File file = File(fileName);
-  await file.writeAsBytes(bytes, flush: true);
-  OpenFile.open(fileName);
+  var status = await Permission.storage.status;
+  if (status.isGranted) {
+    final String fileName = '/storage/emulated/0/Download/$paciente${fecha.toString().substring(0, 10)}.pdf';
+
+    final File file = File(fileName);
+    await file.writeAsBytes(bytes, flush: true);
+    // Dispose the document.
+    document.dispose();
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Se descargó el archivo, véalo en Downloads'))
+    );
+  } else {
+    var a = await Permission.storage.request();
+    if(a.isPermanentlyDenied){
+      openAppSettings();
+    }
+  } 
+
+  
+  // OpenFile.open(fileName);
 
   // // Save the document.
   // File(fileName).writeAsBytes(await document.save());
@@ -89,18 +111,26 @@ PdfGrid getGrid(List<PrescripcionElement> receta, PdfPage page) {
 }
 
 //Draws the invoice header
-PdfLayoutResult drawHeader(PdfPage page, Size pageSize, PdfGrid grid,
-    String paciente, DateTime fecha) {
+PdfLayoutResult drawHeader(
+    PdfPage page,
+    Size pageSize,
+    PdfGrid grid,
+    String paciente,
+    String apellido,
+    String telefono,
+    String direccion,
+    DateTime fecha) {
   final PdfFont contentFont = PdfStandardFont(PdfFontFamily.helvetica, 9);
   final PdfFont contentFont2 = PdfStandardFont(PdfFontFamily.helvetica, 20);
   //Create data foramt and convert it to text.
   final DateFormat format = DateFormat.yMd();
-  final String titulo = 'Receta Electrónica';
+  const String titulo = 'Receta Electrónica';
   final String invoiceNumber = 'Fecha: ${format.format(fecha)}';
   final Size contentSize = contentFont.measureString(invoiceNumber);
   // ignore: leading_newlines_in_multiline_strings
-  final String address = '''Dr: Xxxxxx Xxxxxx, 
-      \r\nPaciente: $paciente''';
+  final String infopaciente = '''Paciente: $paciente $apellido,
+      \r\nDireccion: $direccion,
+      \r\nTelefono: $telefono''';
 
   PdfTextElement(text: invoiceNumber, font: contentFont).draw(
       page: page,
@@ -112,7 +142,7 @@ PdfLayoutResult drawHeader(PdfPage page, Size pageSize, PdfGrid grid,
       bounds: Rect.fromLTWH(pageSize.width - (contentSize.width + 270), 40,
           contentSize.width + 150, pageSize.height - 120));
 
-  return PdfTextElement(text: address, font: contentFont).draw(
+  return PdfTextElement(text: infopaciente, font: contentFont).draw(
       page: page,
       bounds: Rect.fromLTWH(30, 85, pageSize.width - (contentSize.width + 30),
           pageSize.height - 120))!;
@@ -126,7 +156,7 @@ void drawGrid(PdfPage page, PdfGrid grid, PdfLayoutResult result) {
 }
 
 //Draw the invoice footer data.
-void drawFooter(PdfPage page, Size pageSize) {
+void drawFooter(PdfPage page, Size pageSize, MyAdministrador? administrador) {
   final PdfPen linePen =
       PdfPen(PdfColor(100, 100, 100), dashStyle: PdfDashStyle.custom);
   linePen.dashPattern = <double>[3, 3];
@@ -134,8 +164,9 @@ void drawFooter(PdfPage page, Size pageSize) {
   page.graphics.drawLine(linePen, Offset(0, pageSize.height - 60),
       Offset(pageSize.width, pageSize.height - 60));
 
+  final String infoDoctor = '''Dr: ${administrador!.usuario.nombre} ${administrador.usuario.apellido} \r\nDireccion: ${administrador.usuario.direccion} \r\nTelefono: ${administrador.usuario.telefono} \r\nEspecialidad: ${administrador.especialidad}''';
+
   const String footerContent =
-      // ignore: leading_newlines_in_multiline_strings
       '''Bolivia/Santa Cruz\r\nSanta Cruz de la Sierra\r\n1er anillo/Av Centenario/Pasillo Barbery''';
 
   //Added 30 as a margin for the layout
@@ -143,4 +174,9 @@ void drawFooter(PdfPage page, Size pageSize) {
       footerContent, PdfStandardFont(PdfFontFamily.helvetica, 9),
       format: PdfStringFormat(alignment: PdfTextAlignment.right),
       bounds: Rect.fromLTWH(pageSize.width - 30, pageSize.height - 50, 0, 0));
+
+  page.graphics.drawString(
+      infoDoctor, PdfStandardFont(PdfFontFamily.helvetica, 9),
+      format: PdfStringFormat(alignment: PdfTextAlignment.left),
+      bounds: Rect.fromLTWH(30,pageSize.height - 50, 0, 0));
 }

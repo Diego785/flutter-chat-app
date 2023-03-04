@@ -31,23 +31,43 @@ class SpecificProductosResponse {
 class SpecificProduct {
     SpecificProduct({
         required this.id,
-        required this.nombre,
         required this.fechaVencimiento,
+        required this.producto,
+    });
+
+    String id;
+    DateTime fechaVencimiento;
+    Producto producto;
+
+    factory SpecificProduct.fromJson(Map<String, dynamic> json) => SpecificProduct(
+        id: json["_id"],
+        fechaVencimiento: DateTime.parse(json["fechaVencimiento"]),
+        producto: Producto.fromJson(json["producto"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "_id": id,
+        "fechaVencimiento": fechaVencimiento.toIso8601String(),
+        "producto": producto.toJson(),
+    };
+}
+
+class Producto {
+    Producto({
+        required this.id,
+        required this.nombre,
     });
 
     String id;
     String nombre;
-    DateTime fechaVencimiento;
 
-    factory SpecificProduct.fromJson(Map<String, dynamic> json) => SpecificProduct(
+    factory Producto.fromJson(Map<String, dynamic> json) => Producto(
         id: json["_id"],
         nombre: json["nombre"],
-        fechaVencimiento: DateTime.parse(json["fechaVencimiento"]),
     );
 
     Map<String, dynamic> toJson() => {
         "_id": id,
         "nombre": nombre,
-        "fechaVencimiento": fechaVencimiento.toIso8601String(),
     };
 }

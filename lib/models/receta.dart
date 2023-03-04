@@ -58,20 +58,52 @@ class MyReceta {
 
 class Cliente {
     Cliente({
+        required this.id,
+        required this.usuario,
+    });
+
+    String id;
+    Usuario usuario;
+
+    factory Cliente.fromJson(Map<String, dynamic> json) => Cliente(
+        id: json["_id"],
+        usuario: Usuario.fromJson(json["usuario"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "_id": id,
+        "usuario": usuario.toJson(),
+    };
+}
+
+class Usuario {
+    Usuario({
         required this.nombre,
+        required this.apellido,
+        required this.direccion,
+        required this.telefono,
         required this.uid,
     });
 
     String nombre;
+    String apellido;
+    String direccion;
+    String telefono;
     String uid;
 
-    factory Cliente.fromJson(Map<String, dynamic> json) => Cliente(
+    factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
         nombre: json["nombre"],
+        apellido: json["apellido"],
+        direccion: json["direccion"],
+        telefono: json["telefono"],
         uid: json["uid"],
     );
 
     Map<String, dynamic> toJson() => {
         "nombre": nombre,
+        "apellido": apellido,
+        "direccion": direccion,
+        "telefono": telefono,
         "uid": uid,
     };
 }

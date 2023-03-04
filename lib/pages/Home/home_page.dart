@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter/services.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:realtime_chat/pages/Home/ejemplo_screen.dart';
+import 'package:realtime_chat/models/uniqueproducto.dart';
+import 'package:realtime_chat/pages/Inventory/details_products_page.dart';
 import 'package:realtime_chat/pages/Inventory/inventory_page.dart';
 import 'package:realtime_chat/pages/Patients/patient_page.dart';
 import 'package:realtime_chat/pages/Receta/receta_page.dart';
 import 'package:realtime_chat/pages/Stock/stock_page.dart';
 import 'package:realtime_chat/pages/Suppliers/supplier_page.dart';
+import 'package:realtime_chat/services/Inventory/productos_service.dart';
 import 'package:realtime_chat/services/auth_service.dart';
 import 'package:realtime_chat/services/socket_service.dart';
 
@@ -28,7 +32,6 @@ class ItemBoton {
 }
 
 class HomePage extends StatefulWidget {
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -37,24 +40,49 @@ class _HomePageState extends State<HomePage> {
   String _data = "";
 
   Future<void> scan() async {
-    String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-        '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _data = barcodeScanRes;
-    });
-    // Añadir producto
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => EjemploScreen(_data)),
-    );
+    var status = await Permission.camera.status;
+    // print(status);
+    if (status.isGranted) {
+      String barcodeScanRes;
+      try {
+      // Platform messages may fail, so we use a try/catch PlatformException.
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+      setState(() {
+        _data = barcodeScanRes;
+        // print("CCCCCCCCCC");
+      });
+      // print("BBBBBBB");
+      // final productService = new ProductsService();
+      // Producto? producto;
+      // producto = await productService.getProductforId(_data);
+      // // Añadir producto
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => DetailsProductsPage(
+      //       name: producto!.nombre,
+      //       fechaCreacion: producto!.fechaCreacion,
+      //       fechaVencimiento: producto!.fechaVencimiento,
+      //       imagePath: producto!.foto,
+      //       index: 1,
+      //     ),
+      //   ),
+      // );
+      } on PlatformException {
+        barcodeScanRes = 'Failed to get platform version.';
+      }
+      // If the widget was removed from the tree while the asynchronous platform
+      // message was in flight, we want to discard the reply rather than calling
+      // setState to update our non-existent appearance.
+      if (!mounted) return;
+    } else {
+      var a = await Permission.camera.request();
+      if (a.isPermanentlyDenied) {
+        openAppSettings();
+      }
+    }
+    
   }
 
   @override
@@ -94,12 +122,12 @@ class _HomePageState extends State<HomePage> {
             MaterialPageRoute(builder: (context) => EncabezadoSupplier())),
       ),
       ItemBoton(
-        FontAwesomeIcons.receipt, 
+        FontAwesomeIcons.receipt,
         'Receta Electrónica',
-          Color(0xff6989F5),
-          Color(0xff906EF5),
-          () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => RecetaPage())),
+        Color(0xff6989F5),
+        Color(0xff906EF5),
+        () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => RecetaPage())),
       ),
       ItemBoton(
         FontAwesomeIcons.barcode,
@@ -158,6 +186,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green.shade900,
         child: Icon(Icons.message),
         onPressed: () {
           // socketService.emit('emitir-mensaje',

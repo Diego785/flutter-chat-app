@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:realtime_chat/pages/Home/home_page.dart';
+import 'package:realtime_chat/pages/Inventory/tabs_page.dart';
 
 import 'package:realtime_chat/pages/System/login_page.dart';
 import 'package:realtime_chat/pages/System/home_page.dart';

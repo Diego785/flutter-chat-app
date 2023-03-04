@@ -12,7 +12,7 @@ class RecetasContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 120,
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -26,26 +26,26 @@ class RecetasContainer extends StatelessWidget {
         ],
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // _imageSection(),
-          // SizedBox(width: 15),
           _detailSection(receta),
-          SizedBox(width: 40),
-          _button(receta.id, receta.cliente.nombre, receta.fecha)
+          Align(
+            alignment: Alignment.center,
+            child: _button(receta.id, receta.cliente.usuario.nombre, receta.cliente.usuario.apellido, receta.cliente.usuario.telefono, receta.cliente.usuario.direccion, receta.fecha, context),
+          )
         ],
       ),
     );
   }
 }
 
-FloatingActionButton _button(String idReceta, String nombre, DateTime fecha) {
+FloatingActionButton _button(String idReceta, String nombre, String apellido, String telefono, String direccion, DateTime fecha, BuildContext context) {
   return FloatingActionButton.extended(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       onPressed: () {
         // print(idReceta);
-        createPDF(idReceta, nombre, fecha);
+        createPDF(idReceta, nombre, apellido, telefono, direccion, fecha, context);
       },
       backgroundColor: Colors.red,
       icon: const Icon(Icons.picture_as_pdf),
@@ -73,22 +73,40 @@ Column _detailSection(MyReceta receta) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Row(
-        children: [
-          Text(
-            'Paciente: ' + receta.cliente.nombre,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
+      const Text(
+        'Paciente: ',
+        style: TextStyle(
+          color: Colors.red,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+        ),
       ),
-      SizedBox(
+      const SizedBox(
         width: 10,
       ),
       Text(
+        receta.cliente.usuario.nombre,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      const SizedBox(
+        width: 10,
+      ),
+      Text(
+        receta.cliente.usuario.apellido,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      const SizedBox(
+        width: 10,
+      ),
+      const Text(
         'Fecha de emisión: ',
         style: TextStyle(
           color: Colors.red,
@@ -96,12 +114,12 @@ Column _detailSection(MyReceta receta) {
           fontWeight: FontWeight.w400,
         ),
       ),
-      SizedBox(
+      const SizedBox(
         width: 10,
       ),
       Text(
         receta.fecha.toString().substring(0, 10),
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.black,
           fontSize: 14,
           fontWeight: FontWeight.w400,

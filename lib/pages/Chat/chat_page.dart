@@ -8,7 +8,11 @@ import 'package:realtime_chat/models/mensajes_response.dart';
 import 'package:realtime_chat/services/auth_service.dart';
 import 'package:realtime_chat/services/chat_service.dart';
 import 'package:realtime_chat/services/socket_service.dart';
+import 'package:realtime_chat/widgets/alertas.dart';
 import 'package:realtime_chat/widgets/chat_message.dart';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -132,6 +136,56 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         margin: EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           children: [
+            //Botón de file
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: Platform.isIOS
+                  ? CupertinoButton(
+                      child: const Text('Archivo'),
+                      onPressed: () {},
+                    )
+                  : Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4.0),
+                      child: IconTheme(
+                        data: IconThemeData(color: Colors.blue[400]),
+                        child: IconButton(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          icon: const Icon(
+                            Icons.file_present,
+                          ),
+                          onPressed: () async {
+                            // Select the file using the file_picker package
+                            FilePickerResult? result = await FilePicker.platform.pickFiles();
+                            // print(result!.files.single.name);
+                            
+                            if (result != null ) {
+                              if (result.files.single.name.endsWith('pdf')) {
+
+                                final path = 'files/${result.files.single.name}';
+                                File file = File(result.files.single.path!);
+
+                                // Upload the file to Firebase Storage
+                                Reference ref = FirebaseStorage.instance.ref().child(path);
+                                UploadTask uploadTask = ref.putFile(file);
+
+                                // Get the download URL of the uploaded file
+                                String downloadURL = await (await uploadTask).ref.getDownloadURL();
+                                // print('Link de descarga: $downloadURL');
+                                _handelSubmmited(downloadURL);
+                              // Send the download URL to the chat screen
+                              }else{
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Solo se permite archivos PDF'))
+                                );
+                              }
+                            }  
+                          },
+                        ),
+                      ),
+                    ),
+            ),
+
             Flexible(
               child: TextField(
                 controller: _textController,

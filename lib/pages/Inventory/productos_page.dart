@@ -5,7 +5,7 @@ import 'package:realtime_chat/pages/productos.dart';
 
 import 'package:realtime_chat/services/socket_service.dart';
 import 'package:realtime_chat/models/producto.dart';
-import 'package:realtime_chat/services/productos_service.dart';
+import 'package:realtime_chat/services/Inventory/productos_service.dart';
 
 class ProductsPage extends StatefulWidget {
   @override
@@ -28,7 +28,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final productService = Provider.of<ProductsService>(context);
+    //final productService = Provider.of<ProductsService>(context);
     final socketService = Provider.of<SocketService>(context);
     return Scaffold(
       appBar: AppBar(

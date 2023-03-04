@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "476428256341",
+    "project_id": "files-storage-ee9aa",
+    "storage_bucket": "files-storage-ee9aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476428256341:android:3985f2ee835924b7dc00dc",
+        "android_client_info": {
+          "package_name": "com.example.realtime_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "476428256341-tbp7vf7nfvn0p346scnka2chlg0l9p3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY2XS4wJ3i3VkI--PQ0gxKsr672VcuolE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "476428256341-tbp7vf7nfvn0p346scnka2chlg0l9p3j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
