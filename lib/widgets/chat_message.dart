@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:realtime_chat/services/auth_service.dart';
+import 'package:realtime_chat/services/System/auth_service.dart';
 
 class ChatMessage extends StatelessWidget {
   final String texto;

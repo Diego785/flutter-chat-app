@@ -1,16 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:realtime_chat/pages/Stock/lotes_page.dart';
 import 'package:realtime_chat/widgets/headers.dart';
 
 class EncabezadoStock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: <Widget>[
           Stack(
-            children: [
+            children: const [
               IconHeader(
                 titulo: 'Stock',
                 color1: Color(0xff536CF6),
@@ -20,13 +20,16 @@ class EncabezadoStock extends StatelessWidget {
             ],
           ),
           Positioned(
-              right: 0,
-              top: 45,
-              child: RawMaterialButton(
-                  onPressed: () {},
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(15.0),
-                  child: FaIcon(FontAwesomeIcons.ellipsisV, color: Colors.white)))
+            right: 0,
+            top: 45,
+            child: RawMaterialButton(
+              onPressed: () {},
+              shape: CircleBorder(),
+              padding: EdgeInsets.all(15.0),
+              child: FaIcon(FontAwesomeIcons.ellipsisV, color: Colors.white),
+            ),
+          ),
+          LotesPage(),
         ],
       ),
     );

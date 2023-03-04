@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../models/Inventary/producto.dart';
+import 'package:realtime_chat/models/Inventary/producto.dart';
 
 class ProductosContainer extends StatelessWidget {
-  final Product producto;
+  final Producto producto;
   const ProductosContainer({
     Key? key,
     required this.producto,
@@ -37,7 +36,7 @@ class ProductosContainer extends StatelessWidget {
   }
 }
 
-Container _imageSection(Product producto) {
+Container _imageSection(Producto producto) {
   return Container(
     height: 70,
     width: 90,
@@ -48,7 +47,7 @@ Container _imageSection(Product producto) {
   );
 }
 
-Column _detailSection(Product producto) {
+Column _detailSection(Producto producto) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -68,24 +67,24 @@ Column _detailSection(Product producto) {
         width: 10,
       ),
       Text(
-            'Fecha de Vencimiento: ',
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
+        'Fecha de Vencimiento: ',
+        style: TextStyle(
+          color: Colors.red,
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+        ),
       ),
       SizedBox(
         width: 10,
       ),
-      Text(
-            producto.fechaVencimiento.toString().substring(0, 10),
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-      ),
+      // Text(
+      //       producto.fechaVencimiento.toString().substring(0, 10),
+      //       style: TextStyle(
+      //         color: Colors.black,
+      //         fontSize: 14,
+      //         fontWeight: FontWeight.w400,
+      //       ),
+      // ),
     ],
   );
 }

@@ -31,19 +31,19 @@ class CategoryResponse {
 class Category {
     Category({
         required this.id,
-        required this.nombre,
+        required this.name,
     });
 
     String id;
-    String nombre;
+    String name;
 
     factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["_id"],
-        nombre: json["nombre"],
+        name: json["nombre"],
     );
 
     Map<String, dynamic> toJson() => {
         "_id": id,
-        "nombre": nombre,
+        "nombre": name,
     };
 }

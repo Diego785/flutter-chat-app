@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:realtime_chat/pages/Inventory/inventory_page.dart';
 import 'package:realtime_chat/pages/Inventory/tabs_page.dart';
 import 'package:realtime_chat/services/Inventory/inventory_service.dart';
 
-import 'package:realtime_chat/services/auth_service.dart';
-import 'package:realtime_chat/services/chat_service.dart';
+import 'package:realtime_chat/services/System/auth_service.dart';
+import 'package:realtime_chat/services/System/chat_service.dart';
 import 'package:realtime_chat/services/Inventory/productos_service.dart';
-import 'package:realtime_chat/services/socket_service.dart';
+import 'package:realtime_chat/services/System/socket_service.dart';
 
 import 'package:realtime_chat/routes/routes.dart';
 

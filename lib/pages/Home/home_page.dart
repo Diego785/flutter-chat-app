@@ -8,8 +8,8 @@ import 'package:realtime_chat/pages/Inventory/inventory_page.dart';
 import 'package:realtime_chat/pages/Patients/patient_page.dart';
 import 'package:realtime_chat/pages/Stock/stock_page.dart';
 import 'package:realtime_chat/pages/Suppliers/supplier_page.dart';
-import 'package:realtime_chat/services/auth_service.dart';
-import 'package:realtime_chat/services/socket_service.dart';
+import 'package:realtime_chat/services/System/auth_service.dart';
+import 'package:realtime_chat/services/System/socket_service.dart';
 
 import 'package:realtime_chat/widgets/headers.dart';
 import 'package:realtime_chat/widgets/boton_gordo.dart';

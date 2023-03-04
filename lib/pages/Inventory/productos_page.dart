@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:realtime_chat/models/Inventary/lote.dart';
 import 'package:realtime_chat/pages/productos.dart';
 
-import 'package:realtime_chat/services/socket_service.dart';
+import 'package:realtime_chat/services/System/socket_service.dart';
 import 'package:realtime_chat/models/Inventary/producto.dart';
 import 'package:realtime_chat/services/Inventory/productos_service.dart';
 
@@ -14,7 +15,7 @@ class ProductsPage extends StatefulWidget {
 
 class _ProductsPageState extends State<ProductsPage> {
   final productsService = new ProductsService();
-  List<Product> productos = [];
+  List<Producto> productos = [];
 
 
   RefreshController _refreshController =
