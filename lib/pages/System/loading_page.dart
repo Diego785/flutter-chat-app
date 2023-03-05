@@ -6,8 +6,8 @@ import 'package:realtime_chat/pages/Inventory/tabs_page.dart';
 import 'package:realtime_chat/pages/System/login_page.dart';
 import 'package:realtime_chat/pages/System/home_page.dart';
 
-import 'package:realtime_chat/services/auth_service.dart';
-import 'package:realtime_chat/services/socket_service.dart';
+import 'package:realtime_chat/services/System/auth_service.dart';
+import 'package:realtime_chat/services/System/socket_service.dart';
 
 class LoadingPage extends StatelessWidget {
   @override

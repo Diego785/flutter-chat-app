@@ -15,11 +15,11 @@ class UniqueProducto {
     });
 
     bool ok;
-    Producto producto;
+    Producto2 producto;
 
     factory UniqueProducto.fromJson(Map<String, dynamic> json) => UniqueProducto(
         ok: json["ok"],
-        producto: Producto.fromJson(json["producto"]),
+        producto: Producto2.fromJson(json["producto"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -28,8 +28,8 @@ class UniqueProducto {
     };
 }
 
-class Producto {
-    Producto({
+class Producto2 {
+    Producto2({
         required this.id,
         required this.foto,
         required this.fechaCreacion,
@@ -43,7 +43,7 @@ class Producto {
     DateTime fechaVencimiento;
     String nombre;
 
-    factory Producto.fromJson(Map<String, dynamic> json) => Producto(
+    factory Producto2.fromJson(Map<String, dynamic> json) => Producto2(
         id: json["_id"],
         foto: json["foto"],
         fechaCreacion: DateTime.parse(json["fechaCreacion"]),

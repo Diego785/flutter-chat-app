@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:realtime_chat/helpers/show_alert.dart';
-import 'package:realtime_chat/services/socket_service.dart';
+import 'package:realtime_chat/services/System/socket_service.dart';
 import 'package:realtime_chat/widgets/boton_azul.dart';
-import 'package:realtime_chat/services/auth_service.dart';
+import 'package:realtime_chat/services/System/auth_service.dart';
 import 'package:realtime_chat/widgets/custom_input.dart';
 import 'package:realtime_chat/widgets/labels.dart';
 import 'package:realtime_chat/widgets/logo.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:realtime_chat/services/auth_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
+import 'package:realtime_chat/services/System/auth_service.dart';
 
 class ChatMessage extends StatefulWidget {
   final String texto;

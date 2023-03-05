@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:realtime_chat/models/Inventary/producto.dart';
+import 'package:realtime_chat/pages/Inventory/edit_product_page.dart';
 
 class DetailsProductsPage extends StatelessWidget {
-  final String name;
-  final DateTime fechaCreacion;
-  final DateTime fechaVencimiento;
-  final String imagePath;
+  final Producto product;
   final int index;
   const DetailsProductsPage({
-    required this.name,
-    required this.fechaCreacion,
-    required this.fechaVencimiento,
-    required this.imagePath,
+    required this.product,
     required this.index,
   });
 
@@ -22,7 +18,7 @@ class DetailsProductsPage extends StatelessWidget {
           children: [
             Expanded(
               child: Hero(
-                tag: 'foto$index',
+                tag: '${product.foto}$index',
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -30,7 +26,7 @@ class DetailsProductsPage extends StatelessWidget {
                       bottomRight: Radius.circular(30),
                     ),
                     image: DecorationImage(
-                        image: NetworkImage(this.imagePath), fit: BoxFit.cover),
+                        image: NetworkImage(product.foto), fit: BoxFit.cover),
                   ),
                 ),
               ),
@@ -47,32 +43,32 @@ class DetailsProductsPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          this.name,
+                          product.nombre,
                           style: TextStyle(
                             color: Colors.cyan.shade300,
                             fontSize: 25,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        Text(
-                          "Created: " + this.fechaCreacion.toString(),
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Text(
-                          "Expiration: " + this.fechaVencimiento.toString(),
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
+                        //  Text(
+                        //    "Created: " + lote.fechaCreacion.toString(),
+                        //    style: TextStyle(
+                        //      fontSize: 15,
+                        //      fontWeight: FontWeight.w400,
+                        //    ),
+                        //  ),
+                        //  Text(
+                        //    "Expiration: " + lote.fechaVencimiento.toString(),
+                        //    style: TextStyle(
+                        //      fontSize: 15,
+                        //      fontWeight: FontWeight.w400,
+                        //    ),
+                        //  ),
                         SizedBox(
                           height: 10,
                         ),
                         Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                          product.descripcion,
                           style: TextStyle(
                             fontSize: 18,
                           ),
@@ -105,7 +101,12 @@ class DetailsProductsPage extends StatelessWidget {
                           color: Colors.lightBlueAccent,
                           padding: EdgeInsets.symmetric(vertical: 15),
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditProductPage(
+                                          product: product,
+                                        ))),
                             child: Text(
                               "Edit",
                               style: TextStyle(color: Colors.white),

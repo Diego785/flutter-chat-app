@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:realtime_chat/global/environment.dart';
 import 'package:realtime_chat/models/administrador.dart';
-import 'package:realtime_chat/services/auth_service.dart';
+import 'package:realtime_chat/services/System/auth_service.dart';
 
 class AdministradorService with ChangeNotifier {
   Future<MyAdministrador?> getAdministrador() async {

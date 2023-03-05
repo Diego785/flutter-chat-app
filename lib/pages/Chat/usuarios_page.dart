@@ -3,12 +3,12 @@ import 'package:provider/provider.dart';
 
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:realtime_chat/services/auth_service.dart';
-import 'package:realtime_chat/services/chat_service.dart';
-import 'package:realtime_chat/services/socket_service.dart';
+import 'package:realtime_chat/services/System/auth_service.dart';
+import 'package:realtime_chat/services/System/chat_service.dart';
+import 'package:realtime_chat/services/System/socket_service.dart';
 
 import 'package:realtime_chat/models/usuario.dart';
-import 'package:realtime_chat/services/usuarios_service.dart';
+import 'package:realtime_chat/services/System/usuarios_service.dart';
 
 class UsuariosPage extends StatefulWidget {
   @override

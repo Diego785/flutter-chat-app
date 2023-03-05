@@ -1,15 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:realtime_chat/global/environment.dart';
 import 'package:realtime_chat/models/productos.dart';
-import 'package:realtime_chat/models/specific-products.dart';
-import 'package:realtime_chat/models/producto.dart';
-import 'package:realtime_chat/models/uniqueproducto.dart';
-import 'package:realtime_chat/services/auth_service.dart';
+import 'package:realtime_chat/models/Inventary/category.dart';
+import 'package:realtime_chat/models/Inventary/specific-products.dart';
+import 'package:realtime_chat/models/Inventary/producto.dart';
 
 class ProductsService with ChangeNotifier {
-  Future<List<Product>> getProducts() async {
+  Future<List<Producto>> getProducts() async {
     try {
       final uri = Uri.parse('${Environment.apiUrl}/productos');
       final resp =
@@ -24,7 +25,7 @@ class ProductsService with ChangeNotifier {
     }
   }
 
-  Future<List<Product>> getAvailableProducts() async {
+  Future<List<Producto>> getAvailableProducts() async {
     try {
       final uri =
           Uri.parse('${Environment.apiUrl}/productos/available-products');
@@ -32,13 +33,16 @@ class ProductsService with ChangeNotifier {
           await http.get(uri, headers: {'Content-Type': 'application/json'});
 
       final productResponse = productosResponseFromJson(resp.body);
+      for (var i = 0; i < productResponse.myProducts.length; i++) {
+        productResponse.myProducts[i].categorySelected = 'Disponibles';
+      }
       return productResponse.myProducts;
     } catch (error) {
       return [];
     }
   }
 
-  Future<List<Product>> getExpiratedProducts() async {
+  Future<List<Producto>> getExpiratedProducts() async {
     try {
       final uri =
           Uri.parse('${Environment.apiUrl}/productos/expirated-products');
@@ -46,6 +50,9 @@ class ProductsService with ChangeNotifier {
           await http.get(uri, headers: {'Content-Type': 'application/json'});
 
       final productResponse = productosResponseFromJson(resp.body);
+      for (var i = 0; i < productResponse.myProducts.length; i++) {
+        productResponse.myProducts[i].categorySelected = 'Caducados';
+      }
       return productResponse.myProducts;
     } catch (error) {
       return [];
@@ -66,33 +73,6 @@ class ProductsService with ChangeNotifier {
     }
   }
 
-  // Future<Producto?> getProductforId(String productoID) async {
-  //   try {
-  //     final uri = Uri.parse(
-  //         '${Environment.apiUrl}/productos/unique-product/$productoID');
-  //     final resp;
-  //     final token = await AuthService.getToken();
-
-  //     if (token != null) {
-  //       print('TOKEN NO NULL');
-
-  //       resp = await http.get(uri,
-  //           headers: {'Content-Type': 'application/json', 'x-token': token});
-  //     } else {
-  //       print('TOKEN NULL');
-
-  //       resp = await http.get(uri, headers: {
-  //         'Content-Type': 'application/json',
-  //       });
-  //     }
-
-  //     final productoResponse = uniqueProductoFromJson(resp.body);
-  //     return productoResponse.producto;
-  //   } catch (error) {
-  //     return null;
-  //   }
-  // }
-
   Future<List<MyProduct>> getProductsName() async {
     try {
       final uri = Uri.parse('${Environment.apiUrl}/productos/allproducts');
@@ -105,6 +85,66 @@ class ProductsService with ChangeNotifier {
     } catch (error) {
       // print('error');
       return [];
+    }
+  }
+
+  Future<List<Category>> getCategories() async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/productos/categories');
+      final resp =
+          await http.get(uri, headers: {'Content-Type': 'application/json'});
+
+      final categoryResponse = categoryResponseFromJson(resp.body);
+      return categoryResponse.categories;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<Producto>> getProductsByCategory(String categoryId) async {
+    try {
+      final uri =
+          Uri.parse('${Environment.apiUrl}/productos/by-category/$categoryId');
+      final resp =
+          await http.get(uri, headers: {'Content-Type': 'application/json'});
+
+      final productResponse = productosResponseFromJson(resp.body);
+      return productResponse.myProducts;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future updateProduct(
+      String productId, String name, String description) async {
+    final uri = Uri.parse('${Environment.apiUrl}/productos/edit/$productId');
+    final data = {'nombre': name, 'descripcion': description};
+    final resp = await http.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    if (resp.statusCode == 200) {
+      return true;
+    } else {
+      final respBody = jsonDecode(resp.body);
+      return respBody['msg'];
+    }
+  }
+
+  Future createProduct(String name, String photo, String description, String categoryId) async {
+    final uri = Uri.parse('${Environment.apiUrl}/productos/new');
+    final data = {'nombre': name, 'foto': photo, 'descripcion': description, 'categoria': categoryId};
+    final resp = await http.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    if (resp.statusCode == 200) {
+      return true;
+    } else {
+      final respBody = jsonDecode(resp.body);
+      return respBody['msg'];
     }
   }
 }

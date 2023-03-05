@@ -14,8 +14,8 @@ import 'package:realtime_chat/pages/Receta/receta_page.dart';
 import 'package:realtime_chat/pages/Stock/stock_page.dart';
 import 'package:realtime_chat/pages/Suppliers/supplier_page.dart';
 import 'package:realtime_chat/services/Inventory/productos_service.dart';
-import 'package:realtime_chat/services/auth_service.dart';
-import 'package:realtime_chat/services/socket_service.dart';
+import 'package:realtime_chat/services/System/auth_service.dart';
+import 'package:realtime_chat/services/System/socket_service.dart';
 
 import 'package:realtime_chat/widgets/headers.dart';
 import 'package:realtime_chat/widgets/boton_gordo.dart';

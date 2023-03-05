@@ -37,12 +37,12 @@ class SpecificProduct {
 
     String id;
     DateTime fechaVencimiento;
-    Producto producto;
+    Producto1 producto;
 
     factory SpecificProduct.fromJson(Map<String, dynamic> json) => SpecificProduct(
         id: json["_id"],
         fechaVencimiento: DateTime.parse(json["fechaVencimiento"]),
-        producto: Producto.fromJson(json["producto"]),
+        producto: Producto1.fromJson(json["producto"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -52,8 +52,8 @@ class SpecificProduct {
     };
 }
 
-class Producto {
-    Producto({
+class Producto1 {
+    Producto1({
         required this.id,
         required this.nombre,
     });
@@ -61,7 +61,7 @@ class Producto {
     String id;
     String nombre;
 
-    factory Producto.fromJson(Map<String, dynamic> json) => Producto(
+    factory Producto1.fromJson(Map<String, dynamic> json) => Producto1(
         id: json["_id"],
         nombre: json["nombre"],
     );
