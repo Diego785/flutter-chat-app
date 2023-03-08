@@ -35,6 +35,7 @@ class Lote {
         required this.id,
         required this.fechaCreacion,
         required this.fechaVencimiento,
+        required this.fechaEntrega,
         required this.cantidad,
         required this.producto,
     });
@@ -42,6 +43,7 @@ class Lote {
     String id;
     DateTime fechaCreacion;
     DateTime fechaVencimiento;
+    DateTime fechaEntrega;
     int cantidad;
     Producto producto;
 
@@ -49,6 +51,7 @@ class Lote {
         id: json["_id"],
         fechaCreacion: DateTime.parse(json["fechaCreacion"]),
         fechaVencimiento: DateTime.parse(json["fechaVencimiento"]),
+        fechaEntrega: DateTime.parse(json["fechaEntrega"]),
         cantidad: json["cantidad"],
         producto: Producto.fromJson(json["producto"]),
     );
@@ -57,6 +60,7 @@ class Lote {
         "_id": id,
         "fechaCreacion": fechaCreacion.toIso8601String(),
         "fechaVencimiento": fechaVencimiento.toIso8601String(),
+        "fechaEntrega": fechaEntrega.toIso8601String(),
         "cantidad": cantidad,
         "producto": producto.toJson(),
     };

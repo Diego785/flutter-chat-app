@@ -31,7 +31,14 @@ class RecetasContainer extends StatelessWidget {
           _detailSection(receta),
           Align(
             alignment: Alignment.center,
-            child: _button(receta.id, receta.cliente.usuario.nombre, receta.cliente.usuario.apellido, receta.cliente.usuario.telefono, receta.cliente.usuario.direccion, receta.fecha, context),
+            child: _button(
+                receta.id,
+                receta.cliente.usuario.nombre,
+                receta.cliente.usuario.apellido,
+                receta.cliente.usuario.telefono,
+                receta.cliente.usuario.direccion,
+                receta.fecha,
+                context),
           )
         ],
       ),
@@ -39,13 +46,16 @@ class RecetasContainer extends StatelessWidget {
   }
 }
 
-FloatingActionButton _button(String idReceta, String nombre, String apellido, String telefono, String direccion, DateTime fecha, BuildContext context) {
+FloatingActionButton _button(String idReceta, String nombre, String apellido,
+    String telefono, String direccion, DateTime fecha, BuildContext context) {
   return FloatingActionButton.extended(
+      heroTag: idReceta,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       onPressed: () {
         // print(idReceta);
-        createPDF(idReceta, nombre, apellido, telefono, direccion, fecha, context);
+        createPDF(
+            idReceta, nombre, apellido, telefono, direccion, fecha, context);
       },
       backgroundColor: Colors.red,
       icon: const Icon(Icons.picture_as_pdf),

@@ -86,6 +86,7 @@ class _EncabezadoInventoryState extends State<EncabezadoInventory> {
               height: 75,
               child: FittedBox(
                 child: FloatingActionButton(
+                  heroTag: "InventoryPage",
                     elevation: 5,
                     backgroundColor: Colors.blue.shade700,
                     foregroundColor: Colors.black,

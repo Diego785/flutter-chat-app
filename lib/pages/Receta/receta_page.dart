@@ -30,6 +30,7 @@ class _RecetaPageState extends State<RecetaPage> {
     final recetaService = Provider.of<RecetasService>(context);
     return Scaffold(
       appBar: AppBar(
+        
         centerTitle: true,
         title: Text(
           "Lista de Recetas",

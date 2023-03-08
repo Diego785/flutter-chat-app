@@ -186,6 +186,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "MainButton",
         backgroundColor: Colors.green.shade900,
         child: Icon(Icons.message),
         onPressed: () {
