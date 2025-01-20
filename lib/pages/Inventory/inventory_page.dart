@@ -246,7 +246,7 @@ class _Tab1PageState extends State<Tab1Page> {
                                     categories.categoriesIcons[index],
                                     color: (categories.selectedCategory ==
                                             categories.categories[index])
-                                        ? miTema.accentColor
+                                        ? miTema.primaryColor
                                         : Colors.cyan.shade900,
                                   ),
                                 ),

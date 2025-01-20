@@ -60,9 +60,14 @@ class AuthService with ChangeNotifier {
   }
 
   Future register(String name, String email, String password) async {
+
+    print('entering to the register page');
+
     this.autenticando = true;
 
     final data = {'nombre': name, 'email': email, 'password': password};
+
+    print(data);
 
     final uri = Uri.parse('${Environment.apiUrl}/login/new');
 
@@ -71,6 +76,8 @@ class AuthService with ChangeNotifier {
       body: jsonEncode(data),
       headers: {'Content-Type': 'application/json'},
     );
+
+    print(resp.statusCode);
 
     this.autenticando = false;
 
@@ -89,9 +96,10 @@ class AuthService with ChangeNotifier {
 
   Future<bool> isLoggedIn() async {
     final token = await _storage.read(key: 'token');
+    print('Token retrieved: $token'); // Log token value
 
     final uri = Uri.parse('${Environment.apiUrl}/login/renew');
-
+    print('API URI: $uri');
     final resp;
 
     if (token != null) {
@@ -102,14 +110,21 @@ class AuthService with ChangeNotifier {
           'x-token': token,
         },
       );
+      print(
+          'Response with token: ${resp.statusCode}, ${resp.body}'); // Log response
     } else {
+      print('entering');
       resp = await http.get(
         uri,
         headers: {
           'Content-Type': 'application/json',
         },
       );
+      print(
+          'Response without token: ${resp.statusCode}, ${resp.body}'); // Log response
     }
+
+    print('Response: ${resp.statusCode}, ${resp.body}'); // Log response
 
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);

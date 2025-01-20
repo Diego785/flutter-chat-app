@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class InventoryService with ChangeNotifier {
 
   String _selectedCategory = 'Todos';

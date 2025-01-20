@@ -156,7 +156,7 @@ String changetoDays(List<SpecificProduct> productos) {
       salida = salida + ", ";
     }
   }
-  // crearNotificacion(salida, productos);
+  crearNotificacion(salida, productos);
   return salida;
 }
 
